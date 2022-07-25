@@ -1,15 +1,28 @@
 import React, { useState } from 'react'
 import { Formik, Form, getIn, FieldArray } from 'formik'
-import { Button, Grid, TextField } from '@material-ui/core'
+import { Button, Grid, makeStyles, TextField } from '@material-ui/core'
 import Loader from '../Loader'
 import AddIcon from '@material-ui/icons/Add'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Axios from 'axios'
 const apiURL = process.env.REACT_APP_API_URL
 
+
+const useStyles = makeStyles({
+  root: {
+    "&&&:before": {
+      borderBottom: "none"
+    },
+    "&&&:after": {
+      borderBottom: "none"
+    }
+  },
+});
+
 // eslint-disable-next-line react/prop-types
 export default function AddAndEdit({ onClose }) {
   const [loading, setLoading] = useState(false)
+	const classes = useStyles();
 
   async function addCategory(data) {
     setLoading(true)
@@ -24,7 +37,7 @@ export default function AddAndEdit({ onClose }) {
         <Loader />
       ) : (
         <>
-          <h2>Add Categories</h2>
+          <h4>Add Categories</h4>
           <Formik
             initialValues={{
               categories: [{}]
@@ -42,8 +55,10 @@ export default function AddAndEdit({ onClose }) {
 
                         return (
                           <Grid container key={p.id} spacing={2} alignItems='center'>
-                            <Grid item lg={6} sm={12} md={12}>
+                            <Grid item lg={8} sm={12} md={12}>
                               <TextField
+															  InputProps={{ classes }}
+																inputProps={{style: { marginLeft: '20px' }}}
                                 fullWidth
                                 margin='normal'
                                 variant='outlined'

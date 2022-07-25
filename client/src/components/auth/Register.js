@@ -1,56 +1,58 @@
-import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
+import { useState } from 'react';
 
-class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
+
+function Register () {
+  let [state ,setState]= useState({
       name: "",
       email: "",
       password: "",
       password2: "",
       errors: {}
-    };
-  }
-
-  componentDidMount() {
-    // If logged in and user navigates to Register page, should redirect them to dashboard
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
     }
-  }
+	);
+  
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({
-        errors: nextProps.errors
-      });
-    }
-  }
+  const auth = useSelector(state => state.auth)
+	const errorsFromRedux = useSelector(state => state.errors)
+	
+	let navigate = useNavigate()
+	const dispatch = useDispatch()	
 
-  onChange = e => {
-    this.setState({ [e.target.id]: e.target.value });
+  function goToTheRoute(route) {
+    navigate(route)
+  }
+	
+	if(auth.isAuthenticated){
+		goToTheRoute('/')
+	}
+
+  function onChange(e){
+    setState({...state, [e.target.id]: e.target.value });
   };
 
-  onSubmit = e => {
+ function onSubmit (e) {
     e.preventDefault();
 
     const newUser = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      password2: this.state.password2
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      password2: state.password2
     };
 
-    this.props.registerUser(newUser, this.props.history);
+   dispatch(registerUser(newUser,goToTheRoute));
+	 console.log(errorsFromRedux)
+	 setState({...state, errors: errorsFromRedux})
   };
 
-  render() {
-    const { errors } = this.state;
+
+    const { errors } = state;
 
     return (
       <div className="container">
@@ -68,11 +70,11 @@ class Register extends Component {
                 Already have an account? <Link to="/login">Log in</Link>
               </p>
             </div>
-            <form noValidate onSubmit={this.onSubmit}>
+            <form noValidate onSubmit={onSubmit}>
               <div className="input-field col s12">
                 <input
-                  onChange={this.onChange}
-                  value={this.state.name}
+                  onChange={onChange}
+                  value={state.name}
                   error={errors.name}
                   id="name"
                   type="text"
@@ -85,8 +87,8 @@ class Register extends Component {
               </div>
               <div className="input-field col s12">
                 <input
-                  onChange={this.onChange}
-                  value={this.state.email}
+                  onChange={onChange}
+                  value={state.email}
                   error={errors.email}
                   id="email"
                   type="email"
@@ -99,8 +101,8 @@ class Register extends Component {
               </div>
               <div className="input-field col s12">
                 <input
-                  onChange={this.onChange}
-                  value={this.state.password}
+                  onChange={onChange}
+                  value={state.password}
                   error={errors.password}
                   id="password"
                   type="password"
@@ -113,8 +115,8 @@ class Register extends Component {
               </div>
               <div className="input-field col s12">
                 <input
-                  onChange={this.onChange}
-                  value={this.state.password2}
+                  onChange={onChange}
+                  value={state.password2}
                   error={errors.password2}
                   id="password2"
                   type="password"
@@ -145,7 +147,7 @@ class Register extends Component {
       </div>
     );
   }
-}
+
 
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
@@ -153,12 +155,5 @@ Register.propTypes = {
   errors: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors
-});
 
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(Register);
+export default Register

@@ -27,23 +27,22 @@ function Home({ match }) {
   let queryPage = params.get("page");
   if (!queryPage) queryPage = 1;
 
-  console.log("Page", queryPage);
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(queryPage);
   const [re, setRe] = useState(false);
   const fetchQs = () =>
     fetchQuestions(page)
       .then((res) => {
-        console.log(res);
         setQuestions(res);
       })
       .catch((err) => {
-        toast.error("Failed to fetch questions");
+        toast.error("Failed to fetch questions, Please login first");
       });
   useEffect(() => {
     if (isAuthenticated) fetchQs();
     else goToTheRoute("/");
   }, [page, re]);
+
   return (
     <React.Fragment>
       {/* <HomePageSlider/> */}

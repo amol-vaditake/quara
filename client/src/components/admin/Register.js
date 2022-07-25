@@ -8,9 +8,33 @@ import axios from 'axios'
 import Loader from './Loader'
 import { useNavigate } from 'react-router-dom'
 
+import { makeStyles } from "@material-ui/core";
+import { useSelector } from 'react-redux'
+
+const useStyles = makeStyles({
+  underline: {
+    "&&&:before": {
+      borderBottom: "none"
+    },
+    "&&:after": {
+      borderBottom: "none"
+    }
+  }
+});
+
+
+
 export default function WithMaterialUI() {
   let [loading, setLoading] = useState(false)
   let navigate = useNavigate()
+	const classes = useStyles();
+	const { user } = useSelector(state => state.auth)
+
+	function goToTheRoute(route) {
+		navigate(route)
+	}
+
+	if(user?.role === 'admin') goToTheRoute('/admin/dashboard')
 
   function onSubmit(values) {
     setLoading(true)
@@ -22,7 +46,7 @@ export default function WithMaterialUI() {
     axios
       .post(process.env.REACT_APP_API_URL + '/api/admin/makeadmin', values)
       .then(() => {
-        navigate('/login')
+        navigate('/admin/login')
       })
       // eslint-disable-next-line no-unused-vars
       .catch((err) => {
@@ -52,9 +76,12 @@ export default function WithMaterialUI() {
 
   return (
     <Grid container spacing={0} direction='column' alignItems='center' justifyContent='center' style={{ minHeight: '60vh' }}>
-      <Grid>
+			
+      <Grid style={{border:'2px solid #5B84B1FF',padding:'10px'}}>
+			  <Grid item xs={12} style={{textAlign:'center'}}><h5>Register As Admin</h5></Grid>
         <form onSubmit={formik.handleSubmit}>
           <TextField
+					  InputProps={{ classes }}
             fullWidth
             id='name'
             name='name'
@@ -66,6 +93,7 @@ export default function WithMaterialUI() {
             style={{ marginBottom: '0.3rem' }}
           />
           <TextField
+					  InputProps={{ classes }}
             fullWidth
             id='email'
             name='email'
@@ -77,6 +105,7 @@ export default function WithMaterialUI() {
             style={{ marginBottom: '0.3rem' }}
           />
           <TextField
+					  InputProps={{ classes }}
             fullWidth
             id='password'
             name='password'
@@ -89,6 +118,7 @@ export default function WithMaterialUI() {
             style={{ marginBottom: '0.3rem' }}
           />
           <TextField
+					  InputProps={{ classes }}
             fullWidth
             id='password2'
             name='password2'

@@ -11,7 +11,7 @@ export default function UsersList() {
   }
 
   return (
-    <Grid style={{ paddingLeft: '15%', paddingRight: '15%' }}>
+    <Grid style={{ paddingLeft: '15%', paddingRight: '15%',paddingTop:'5%'}}>
       <Paper elevation={4}>
         <Grid container justifyContent='center' alignItems='center'>
           <Grid item xs={12}>
@@ -20,12 +20,12 @@ export default function UsersList() {
           <Grid item xs={12} container justifyContent='center' style={{ textAlign: 'center', margin: '20px' }}>
             <Grid item xs={3}></Grid>
             <Grid item xs={3}>
-              <Button color='primary' variant='contained' style={{ textDecoration: 'none' }} onClick={() => goToTheRoute('/categories')}>
+              <Button color='primary' variant='contained' style={{ textDecoration: 'none' }} onClick={() => goToTheRoute('/admin/categories')}>
                 Categories
               </Button>
             </Grid>
             <Grid item xs={3}>
-              <Button color='primary' variant='contained' style={{ textDecoration: 'none' }} onClick={() => goToTheRoute('/dashboard')}>
+              <Button color='primary' variant='contained' style={{ textDecoration: 'none' }} onClick={() => goToTheRoute('/admin/dashboard')}>
                 Dashboard
               </Button>
             </Grid>

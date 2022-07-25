@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const createQuestion = (question) => {
+const createQuestion = (question ,categoryId) => {
     return new Promise((resolve, reject) => {
-        axios.post(`${process.env.REACT_APP_API_URL}/api/users/questions`, { question })
+        axios.post(`${process.env.REACT_APP_API_URL}/api/users/questions`, { question ,categoryId})
             .then(res => {
                 resolve(res.data)
             })

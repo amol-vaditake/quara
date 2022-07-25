@@ -11,7 +11,7 @@ function Navbar() {
   function goToTheRoute(route) {
     navigate(route)
   }
-  let user = useSelector((state) => state.user)
+  let {user} = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   return (

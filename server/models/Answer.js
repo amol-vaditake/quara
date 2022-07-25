@@ -16,10 +16,9 @@ let answerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "users"
     }
-},
-    {
-        timestamps: true
-    })
+}, {
+    timestamps: true
+})
 
 const Answer = model("Answer", answerSchema);
 module.exports = Answer;

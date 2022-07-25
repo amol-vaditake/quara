@@ -11,9 +11,9 @@ const app = express();
 
 // Bodyparser middleware
 app.use(
-  bodyParser.urlencoded({
-    extended: false
-  })
+    bodyParser.urlencoded({
+        extended: false
+    })
 );
 app.use(bodyParser.json());
 
@@ -26,22 +26,26 @@ app.use(express.json());
 
 // Connect to MongoDB
 mongoose
-  .connect(
-    process.env.MONGOURI,
-    { useNewUrlParser: true,useUnifiedTopology: true   }
-  )
-  .then(() => console.log("MongoDB successfully connected"))
-  .catch(err => console.log(err));
+    .connect(
+        process.env.MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true }
+    )
+    .then(() => console.log("MongoDB successfully connected"))
+    .catch(err => console.log(err));
 
 // Passport middleware
 app.use(passport.initialize());
-app.use('/audios',express.static('audios'));
+app.use('/audios', express.static('audios'));
 
 // Routes
 const users = require("./routes/api/users");
 const draw = require("./routes/api/draw");
+const adminroute = require("./routes/api/adminroute");
+const category = require("./routes/api/Category.route");
+
 app.use("/api/users", users);
 app.use("/api/draw", draw);
+app.use("/api/admin", adminroute);
+app.use("/api/categories", category);
 
 
 // Passport config

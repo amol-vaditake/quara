@@ -29,15 +29,15 @@ export default function CategoriesList() {
         <Paper elevation={4}>
           <Grid container justifyContent='center' alignItems='center'>
             <Grid item md={4} sm={4} lg={4} style={{ textAlign: 'center', fontFamily: 'system-ui' }}>
-              <Button variant='contained' size='small' onClick={() => goToTheRoute('/dashboard')}>
+              <Button variant='contained' size='small' onClick={() => goToTheRoute('/admin/dashboard')} color='primary'>
                 Go To Dashboard
               </Button>
             </Grid>
-            <Grid item md={4} sm={4} lg={4} style={{ textAlign: 'center', fontFamily: 'system-ui' }}>
-              <h2>Categories List</h2>
+            <Grid item md={4} sm={4} lg={4} style={{ textAlign: 'center' }}>
+              <h5>Categories List</h5>
             </Grid>
             <Grid item md={4} sm={4} lg={4}>
-              <Button variant='contained' size='small' onClick={() => setAdd(true)}>
+              <Button variant='contained' color='primary' size='small' onClick={() => setAdd(true)}>
                 Add Category
               </Button>
             </Grid>
@@ -51,6 +51,7 @@ export default function CategoriesList() {
           onClose={() => {
             setAdd(false)
           }}
+					width='50rem'
         >
           <AddAndEditCategories
             onClose={() => {

@@ -2,7 +2,6 @@ import React, { useState} from "react";
 import { useSelector ,useDispatch} from "react-redux";
 import { Link ,useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
 
@@ -13,6 +12,7 @@ function  Login () {
       errors: {}
     })
 		const auth = useSelector(state => state.auth)
+		const errorsFromRedux = useSelector(state => state.errors)
 		let navigate = useNavigate()
 		const dispatch = useDispatch()
 		
@@ -20,12 +20,13 @@ function  Login () {
   function goToTheRoute(route) {
     navigate(route)
   }
+	
 	if(auth.isAuthenticated){
 		goToTheRoute('/')
 	}
 
   function onChange (e) {
-    setState({ [e.target.id]: e.target.value });
+    setState({...state, [e.target.id]: e.target.value });
   };
 
   function onSubmit (e) {
@@ -37,6 +38,7 @@ function  Login () {
     };
 		
    dispatch(loginUser(userData));
+	 setState({...state, errors: errorsFromRedux})
   };
 
 
@@ -102,10 +104,23 @@ function  Login () {
                     letterSpacing: "1.5px",
                     marginTop: "1rem"
                   }}
-                  type="submit"
+                  onClick={onSubmit}
                   className="btn btn-large waves-effect waves-light hoverable blue accent-3"
                 >
                   Login
+                </button>
+								<button
+                  style={{
+                    width: "150px",
+                    borderRadius: "3px",
+                    letterSpacing: "1.5px",
+                    marginTop: "1rem",
+										marginLeft:'2rem'
+                  }}
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+									onClick={()=>goToTheRoute('/register')}
+                >
+                 Register
                 </button>
               </div>
             </form>

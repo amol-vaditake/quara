@@ -9,11 +9,14 @@ let questionSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: "users"
+    },
+    categoryId: {
+        type: Schema.Types.ObjectId,
+        ref: "categories"
     }
-},
-    {
-        timestamps: true
-    })
+}, {
+    timestamps: true
+})
 
 questionSchema.plugin(mongoosePaginate)
 const Question = model("Question", questionSchema);

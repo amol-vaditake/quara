@@ -49,7 +49,8 @@ if (localStorage.jwtToken) {
 
 
 function Wrapper(){
-	let user = useSelector((state) => state.user)
+	let {user} = useSelector((state) => state.auth)
+	console.log(user?.role)
 	return (
 		<div className="App">
 					<ToastContainer/>
@@ -63,17 +64,17 @@ function Wrapper(){
 					<Route exact path="/questions/:question/answers" element={<Answers/> } />
 					<Route exact path="/dashboard" element={<Dashboard/> } />
 					<Route exact path='/' element={user?.role === 'admin' ? <Navigate to='/admin/dashboard' /> : <Login />} />
-					<Route exact path='/admin/dashboard' element={user ? <AdminDashboard /> : <AdminLogin />} />
+					<Route exact path='/admin/dashboard' element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to='/admin/login' />} />
 					<Route exact path='/admin/login' element={user?.role === 'admin' ? <Navigate to='/admin/dashboard' /> : <AdminLogin />} />
-					<Route exact path='/admin/register' element={user?.role === 'admin' ? <AdminDashboard /> : <AdminRegister />} />
+					<Route exact path='/admin/register' element={user?.role === 'admin' ?<Navigate to='/admin/dashboard' /> : <AdminRegister />} />
 					<Route exact path='/admin/categories' element={user?.role === 'admin' ? <AdminCategories /> : <AdminLogin />} />
 					</Routes>
 				</div>
 	)
 }
-function App () {
-	
 
+
+function App () {
 	return (
 		<BrowserRouter>
 		<Provider store={store}>
