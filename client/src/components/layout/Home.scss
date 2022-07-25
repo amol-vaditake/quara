@@ -1,0 +1,35 @@
+.homeContainer {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  h3 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: "Open Sans", sans-serif;
+  }
+  p {
+    color: rgb(117, 117, 117);
+    font-size: 16px;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .slider-wrapper axis-horizontal {
+    height: 190px;
+  }
+}
+.backCont{
+  background: url('bg.jpeg');
+  height: 580px;
+  max-width: 100%;
+  h3 {
+    text-align: center;
+    font-size: 60px;
+    margin: 0;
+    color: #fff;
+    padding-top: 250px;
+    font-weight: bold;
+    font-family: "Open Sans", sans-serif;
+  }
+}
