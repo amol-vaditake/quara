@@ -6,7 +6,7 @@ import jwt_decode from 'jwt-decode'
 import classnames from "classnames";
 import axios from 'axios';
 import { setAuthToken } from './utils';
-import { setUser } from '../../redux/actions';
+import { setCurrentUser } from '../../actions/authActions';
 
 function  Login () {
   let [state,setState] = useState({
@@ -19,26 +19,31 @@ function  Login () {
 		const dispatch = useDispatch()
 		
 
+		const { user } = useSelector(state => state.auth)
+    console.log(user,'usersrsrsr')
 		function goToTheRoute(route) {
 			navigate(route)
 		}
-	
-		function onChange (e) {
-			setState({...state, [e.target.id]: e.target.value });
-		};
+
+	if(user?.role === 'admin') goToTheRoute('/admin/dashboard')
+
+	function onChange (e) {
+		setState({...state, [e.target.id]: e.target.value });
+	};
 
 		function onSubmit(e) {
 			e.preventDefault();
 			axios
 				.post(process.env.REACT_APP_API_URL + '/api/admin/authenticate', state)
 				.then((res) => {
-					console.log(res)
 					const { accesstoken: token } = res.data
+					console.log(token)
 					localStorage.setItem('jwtToken', token)
-					setAuthToken(token)
+					setAuthToken(token,true)
 					const decoded = jwt_decode(token)
-					dispatch(setUser(decoded))
-					if(decoded.role !=='admin') this.setState({...state,errors:{'email':'You are not a admin'}})
+					localStorage.setItem("jwtToken", token);
+					dispatch(setCurrentUser(decoded));
+					if( decoded.role !=='admin') this.setState({...state, errors:{'email':'You are not a admin'}})
 					else goToTheRoute('/admin/dashboard')
 				})
 				// eslint-disable-next-line no-unused-vars

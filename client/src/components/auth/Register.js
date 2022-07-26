@@ -47,7 +47,6 @@ function Register () {
     };
 
    dispatch(registerUser(newUser,goToTheRoute));
-	 console.log(errorsFromRedux)
 	 setState({...state, errors: errorsFromRedux})
   };
 

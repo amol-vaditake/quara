@@ -14,11 +14,25 @@ let answerSchema = new Schema({
     },
     author: {
         type: Schema.Types.ObjectId,
-        ref: "users"
+        required: true
     }
 }, {
     timestamps: true
 })
+
+answerSchema.virtual('fromAdmins', {
+	ref: 'admins',
+	localField: 'author',
+	foreignField: '_id', 
+	justOne: true
+});
+
+answerSchema.virtual('fromUsers', {
+	ref: 'users',
+	localField: 'author',
+	foreignField: '_id',
+	justOne: true
+});
 
 const Answer = model("Answer", answerSchema);
 module.exports = Answer;

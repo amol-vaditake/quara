@@ -8,7 +8,7 @@ let questionSchema = new Schema({
     },
     author: {
         type: Schema.Types.ObjectId,
-        ref: "users"
+				required: true
     },
     categoryId: {
         type: Schema.Types.ObjectId,
@@ -17,6 +17,21 @@ let questionSchema = new Schema({
 }, {
     timestamps: true
 })
+
+
+questionSchema.virtual('fromAdmins', {
+	ref: 'admins',
+	localField: 'author',
+	foreignField: '_id', 
+	justOne: true
+});
+
+questionSchema.virtual('fromUsers', {
+	ref: 'users',
+	localField: 'author',
+	foreignField: '_id',
+	justOne: true
+});
 
 questionSchema.plugin(mongoosePaginate)
 const Question = model("Question", questionSchema);

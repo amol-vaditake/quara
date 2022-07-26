@@ -3,7 +3,8 @@ const Answer = require('../models/Answer');
 const textToSpeech = require('@google-cloud/text-to-speech');
 const fs = require('fs');
 const util = require('util');
-
+const User = require('../models/User');
+const {AdminModel} = require('../models/adminmodel');
 
 const projectId = 'how2voice';
 const keyFilename = 'how2voice-28f683205fdc.json';
@@ -11,7 +12,6 @@ const client = new textToSpeech.TextToSpeechClient({projectId, keyFilename});
 
 const PostQuestion = async(req, res) => {
 	try {
-		console.log(req.body)
 		let question = await Question.create({...req.body, author: req.user.id});
 		return res.json({message: '', question});
 	}
@@ -57,7 +57,7 @@ const PostAnswer = async(req, res) => {
 
 const FetchQA = async(req, res) => {
 	try {
-		Question.paginate({}, {populate: ['author','categoryId'], lean: true, sort: {_id: -1}, page: req.query.page ?? 1, limit: 5})
+		Question.paginate({}, {populate: ['fromAdmins','fromUsers','categoryId'], lean: true, sort: {_id: -1}, page: req.query.page ?? 1, limit: 5})
 			.then(results => {
 				return res.json(results);
 			})
@@ -74,8 +74,18 @@ const FetchQA = async(req, res) => {
 
 const FetchAnswersOfQuestion = async(req, res) => {
 	try {
-		let question = await Question.findOne({_id: req.params.questionId}).populate('author');
-		let answers = await Answer.find({question: req.params.questionId}).sort({_id: -1}).populate('author');
+		let question = await Question.findOne({_id: req.params.questionId}).lean()
+		let u = await User.findOne({_id: question.author})
+		let a = await AdminModel.findOne({_id: question.author})
+		question.author = Boolean(u) ? u: a
+		console.log(question,'qqqqqqqqq')
+		let answers = await Answer.find({question: req.params.questionId}).lean().sort({_id: -1})
+		answers = await Promise.all(answers.map(async a=>{
+			let user = await User.findOne({_id: a.author})
+			let admin = await AdminModel.findOne({_id: a.author})
+			a.author = Boolean(user) ? user: admin 
+			return {...a}
+		}))
 		return res.json({question, answers});
 	}
 	catch (error) {

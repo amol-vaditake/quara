@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { createQuestion } from "../../../actions/postActions";
 import "./ask.scss";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Card, Grid, List, ListItem, ListItemText, Typography } from "@material-ui/core";
+import { Card, Grid, List, ListItem, Typography } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -136,10 +136,12 @@ function Ask({ questions, re, setRe }) {
 
             </div>
         </form>
-
         <List>
           {
-            questions && questions.map((item, index) => (
+            questions && questions.map(q =>{
+							if(q.fromAdmins) return {...q, author:q.fromAdmins}
+							return {...q, author:q.fromUsers}
+						}).map((item, index) => (
               <ListItem style={{ marginTop: 24 }}>
                 <Card style={{ padding: 24, width: "100%", cursor:"pointer" }} onClick={()=>{ goToTheRoute(`/questions/${item._id}/answers`)}}>
                   <Typography variant="h5"><strong>{item.question}</strong></Typography>

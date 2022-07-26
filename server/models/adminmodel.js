@@ -12,7 +12,7 @@ const adminschema = mongoose.Schema({
 	},
 	role: {
 		type: String,
-		default: 'user',
+		default: 'admin',
 	},
 	timestamp: {
 		type: Date,
@@ -21,7 +21,7 @@ const adminschema = mongoose.Schema({
 
 });
 
-const AdminModel = mongoose.model('Admin', adminschema);
+const AdminModel = mongoose.model('admins', adminschema);
 
 module.exports = {
 	AdminModel,

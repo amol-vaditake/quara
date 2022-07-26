@@ -18,7 +18,7 @@ async function AdminAuth(req, res, next) {
 					name: admin.name,
 					email: admin.email,
 					role: 'admin',
-				}, process.env.ACCESS_TOKEN, {
+				}, process.env.SECRETKEY, {
 					expiresIn: 31556926,
 				});
 				req.accesstoken = accesstoken;
@@ -54,7 +54,7 @@ function athenticateadmin(req, res, next) {
 		const token = req.headers.authorization;
 		if (token) {
 			try {
-				const isValidToken = jwt.verify(token, process.env.ACCESS_TOKEN);
+				const isValidToken = jwt.verify(token, process.env.SECRETKEY);
 				if (isValidToken) next();
 				else {
 					res.status(404).json({

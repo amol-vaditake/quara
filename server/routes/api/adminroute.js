@@ -10,8 +10,8 @@ adminrouter.post('/authenticate', AdminAuth, (req, res) => {
 	const token = req.accesstoken;
 	res.status(200).json({
 		msg: 'This is auth',
-		accesstoken: token,
-		refreshtoken: req.refreshtoken,
+		accesstoken: 'Bearer ' + token,
+		refreshtoken: 'Bearer ' + req.refreshtoken,
 	});
 });
 
