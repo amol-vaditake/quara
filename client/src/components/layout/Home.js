@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
-import HomePageSlider from "./HomePageSlider";
-import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./Home.scss";
 import Ask from "./Ask/Ask";
@@ -10,9 +7,7 @@ import { Grid } from "@material-ui/core";
 import { fetchQuestions } from "../../actions/postActions";
 import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
 
-const apiURL = process.env.REACT_APP_API_URL;
 
 function Home({ match }) {
   const location = useLocation();
@@ -22,7 +17,7 @@ function Home({ match }) {
     navigate(route)
   }
 
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  // const { isAuthenticated } = useSelector((state) => state.auth);
   let params = new URLSearchParams(location.search);
   let queryPage = params.get("page");
   if (!queryPage) queryPage = 1;
@@ -39,8 +34,8 @@ function Home({ match }) {
         toast.error("Failed to fetch questions, Please login first");
       });
   useEffect(() => {
-    if (isAuthenticated) fetchQs();
-    else goToTheRoute("/");
+    fetchQs();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, re]);
 
   return (

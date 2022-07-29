@@ -5,6 +5,7 @@ import Loader from '../Loader'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Axios from 'axios'
 import { toast } from "react-toastify";
+import Modal from '../Modal'
 const apiURL = process.env.REACT_APP_API_URL
 
 export default function CategoriesTable({ categories = [], fetch, setFetch }) {
@@ -13,8 +14,7 @@ export default function CategoriesTable({ categories = [], fetch, setFetch }) {
     setFetch(!fetch)
 		toast.success("Category deleted successfully!")
   }
-
-  console.log(categories?.length)
+	let [image,setImage] = React.useState(null)
   return (
     <Paper elevation={4}>
       {categories?.length ? (
@@ -32,13 +32,16 @@ export default function CategoriesTable({ categories = [], fetch, setFetch }) {
               fontSize: '18px'
             }}
           >
-            <Grid item xs={5} style={{ borderRight: '2px solid rgb(255, 137, 130)', lineHeight: '5.8rem' }}>
+            <Grid item xs={3} style={{ borderRight: '2px solid rgb(255, 137, 130)', lineHeight: '7rem' }}>
               Date
             </Grid>
-            <Grid item xs={5} style={{ borderRight: '2px solid rgb(255, 137, 130)', lineHeight: '5.8rem' }}>
+            <Grid item xs={4} style={{ borderRight: '2px solid rgb(255, 137, 130)', lineHeight: '7rem' }}>
               Name
             </Grid>
-            <Grid item xs={2} style={{ lineHeight: '5.8rem' }}>
+						<Grid item xs={3} style={{ borderRight: '2px solid rgb(255, 137, 130)', lineHeight: '7rem' }}>
+              Image
+            </Grid>
+            <Grid item xs={2} style={{ lineHeight: '7rem' }}>
               Delete
             </Grid>
           </Grid>
@@ -48,11 +51,11 @@ export default function CategoriesTable({ categories = [], fetch, setFetch }) {
                 <>
                   <Grid
                     item
-                    xs={5}
+                    xs={3}
                     style={{
                       ...(i !== categories.length - 1 ? { borderBottom: '2px solid rgb(255, 137, 130)' } : {}),
                       borderRight: '2px solid rgb(255, 137, 130)',
-                      lineHeight: '4rem'
+                      lineHeight: '6rem'
                     }}
                     title={new Date(c.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                   >
@@ -60,21 +63,33 @@ export default function CategoriesTable({ categories = [], fetch, setFetch }) {
                   </Grid>
                   <Grid
                     item
-                    xs={5}
+                    xs={4}
                     style={{
                       borderRight: '2px solid rgb(255, 137, 130)',
                       ...(i !== categories.length - 1 ? { borderBottom: '2px solid rgb(255, 137, 130)' } : {}),
-                      lineHeight: '4rem'
+                      lineHeight: '6rem'
                     }}
                   >
                     {c.name}
+                  </Grid>
+									<Grid
+                    item
+                    xs={3}
+                    style={{
+											padding:'8px',
+                      borderRight: '2px solid rgb(255, 137, 130)',
+                      ...(i !== categories.length - 1 ? { borderBottom: '2px solid rgb(255, 137, 130)' } : {}),
+                      lineHeight: '6rem'
+                    }}
+                  >
+                    <img style={{width:'65%'}} onClick={()=>setImage(c.image)} src={c.image}  alt='img' title='Click to see full image'/>
                   </Grid>
                   <Grid
                     item
                     xs={2}
                     style={{
                       ...(i !== categories.length - 1 ? { borderBottom: '2px solid rgb(255, 137, 130)' } : {}),
-                      lineHeight: '4rem'
+                      lineHeight: '6rem'
                     }}
                   >
                     <DeleteIcon size='small' style={{ cursor: 'pointer' }} onClick={() => onDelete(c._id)} />
@@ -90,6 +105,13 @@ export default function CategoriesTable({ categories = [], fetch, setFetch }) {
           <Loader />
         </>
       )}
+			<Modal
+          isOpen={Boolean(image)}
+          onClose={() => setImage(null)}
+					width='50rem'
+        >
+					<img style={{width:'100%'}} src={image}  alt='img'/>
+        </Modal>
     </Paper>
   )
 }

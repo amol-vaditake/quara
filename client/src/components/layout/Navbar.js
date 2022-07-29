@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { IconButton, makeStyles } from "@material-ui/core";
 import { AccountCircle } from '@material-ui/icons';
 import React, { useState } from "react";
@@ -34,9 +35,6 @@ const Navbar = () => {
   const closeMobileMenu = () => setClick(false);
   const { isAuthenticated, user } = useSelector(state => state.auth)
 
-
-  console.log("IsAthenticated", isAuthenticated)
-  console.log("user", user)
   return (
     <div className="header">
       <div className="logo-nav">

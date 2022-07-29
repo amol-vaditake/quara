@@ -4,12 +4,12 @@ import { createQuestion } from "../../../actions/postActions";
 import "./ask.scss";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Card, Grid, List, ListItem, Typography } from "@material-ui/core";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 const apiURL = process.env.REACT_APP_API_URL
 
-function Ask({ questions, re, setRe }) {
+function Ask({ questions, re, setRe ,isCategoryPage, categoryId}) {
   let navigate = useNavigate()
 
 	const auth = useSelector(state => state.auth)
@@ -25,9 +25,9 @@ function Ask({ questions, re, setRe }) {
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
-    axios.get(`${apiURL}/api/categories/get`).then(function (response) {
-      setCategories([{name:'Select Category'}, ...response.data?.categories] || [])
-    })
+		axios.get(`${apiURL}/api/categories/get`).then(function (response) {
+		setCategories([{name:'Select Category'}, ...response.data?.categories] || [])})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -43,14 +43,32 @@ function Ask({ questions, re, setRe }) {
 			return 
 		}
 
-		if(!category){
+		if((!category && !isCategoryPage)){
 			toast.error("Please select category of question")
 			return 
 		}
+		if(isCategoryPage){
+			createQuestion(question,categoryId)
+      .then(res => {
+				toast.success("Question created!")
+        setQuestion('')
+				document.getElementById("myForm").reset();
+        setRe(!re)
+      })
+      .catch(err => {
+        toast.error("Error in posting question!")
+      })
+      .finally(() => {
+        setLoading(false)
+      }
+		  )
+		}
+		else{
     setLoading(true)
     createQuestion(question,category)
       .then(res => {
         setQuestion('')
+				document.getElementById("myForm").reset();
         toast.success("Question created!")
         setRe(!re)
       })
@@ -60,15 +78,17 @@ function Ask({ questions, re, setRe }) {
       })
       .finally(() => {
         setLoading(false)
-      })
+      }
+		)
+	}
   }
   return (
     <React.Fragment>
       <div className="askComp">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} id='myForm'>
 					<Grid container>
           <div
-					  style={{ width: "400px", marginRight: "10px" }}
+					  style={{ width: !isCategoryPage?"400px":'800px', marginRight: "10px" }}
             className="input-field col s12"
           >
             <input id="name" type="text" onChange={(e) => { setError(''); setQuestion(e.target.value) }} />					
@@ -82,7 +102,7 @@ function Ask({ questions, re, setRe }) {
             }
             <label htmlFor="name">Ask what you want ?</label>
           </div>
-					<div
+					{!isCategoryPage &&<div
 					  style={{ width: "400px", marginRight: "10px" }}
             className="input-field col s12"
           >
@@ -96,7 +116,7 @@ function Ask({ questions, re, setRe }) {
 						>
 							{(categories||[]).map(c=>{return<option value={c._id}> {c.name}</option>})}
 						</select>:''}
-          </div>
+          </div>}
 					</Grid>
 					<div className="col s12" style={{ paddingLeft: "11.250px" }}>
               <button
@@ -130,13 +150,29 @@ function Ask({ questions, re, setRe }) {
                 marginTop: "20px",
               }}
             >
-              <img style={{ height: "20px" }} alt='img' src="../../" />
-              <img style={{ height: "30px" }} alt='img' src="/edit.png" />
-              <img style={{ height: "30px" }} alt='img' src='cm.jpg' />
-
+              <img style={{ height: "20px" }} alt='img' src={require('../Ask/cm.jpg')} />
+              <img style={{ height: "30px" }} alt='img' src={require('../Ask/edit.png')} />
+              <img style={{ height: "30px" }} alt='img' src={require('../Ask/cm.jpg')} />
             </div>
         </form>
+				{(categories||[]).filter(c=>Boolean(c._id)).length ?
+				<Grid style={{fontWeight:'500',color:'#b92b27'}}>
+				  <h5>Go to category</h5>
+					<ul>
+						{(categories||[]).filter(c=>Boolean(c._id)).map(c=>
+							{
+							return <li style={{listStyleType:'circle', marginLeft:'2rem'}}>
+											<Link to={`/category/${c._id}`} className="btn-flat waves-effect" style={{color:'#5B84B1FF'}}>
+												{c.name}
+											</Link>
+										</li>
+							}
+						)}
+					</ul>
+				</Grid>
+				:''}
         <List>
+					{(!isCategoryPage && questions?.length) && <h5 style={{color:'#5B84B1FF'}}>All categories Questions</h5>}
           {
             questions && questions.map(q =>{
 							if(q.fromAdmins) return {...q, author:q.fromAdmins}
@@ -158,6 +194,7 @@ function Ask({ questions, re, setRe }) {
             ))
           }
         </List>
+				{isCategoryPage && !questions?.length && <h6>No Questions Created in this category!!</h6>}
         {/* <h3> Ask</h3> */}
       </div>
     </React.Fragment>

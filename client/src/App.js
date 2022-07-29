@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { BrowserRouter, Navigate, Route,Routes } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
@@ -6,7 +6,7 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider, useSelector } from "react-redux";
 import store from "./store";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Navbar from "./components/layout/Navbar";
@@ -17,13 +17,13 @@ import Dashboard from "./components/dashboard/Dashboard";
 
 import "./App.css";
 import Home from "./components/layout/Home";
+import Category from "./components/layout/Category";
 import Profile from "./components/Profile";
 import Answers from "./components/Answers";
 
 //admin Routesimport Login from './components/Login'
 import AdminRegister from './components/admin/Register'
 import AdminLogin from './components/admin/Login'
-import AdminNavbar from './components/admin/Navbar'
 import AdminDashboard from './components/admin/Dashboard'
 import AdminCategories from './components/admin/admin/Categories'
 
@@ -50,7 +50,7 @@ if (localStorage.jwtToken) {
 
 function Wrapper(){
 	let {user} = useSelector((state) => state.auth)
-	console.log(user?.role)
+
 	return (
 		<div className="App">
 					<ToastContainer/>
@@ -62,6 +62,7 @@ function Wrapper(){
 					<Route exact path="/login" element={<Login/> } />
 					<Route exact path="/profile" element={<Profile/> } />
 					<Route exact path="/questions/:question/answers" element={<Answers/> } />
+					<Route exact path="/category/:categoryId" element={<Category/> } />
 					<Route exact path="/dashboard" element={<Dashboard/> } />
 					<Route exact path='/' element={user?.role === 'admin' ? <Navigate to='/admin/dashboard' /> : <Login />} />
 					<Route exact path='/admin/dashboard' element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to='/admin/login' />} />

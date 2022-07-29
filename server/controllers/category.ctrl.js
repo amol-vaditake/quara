@@ -13,6 +13,23 @@ const createcategory = async(req, res) => {
     }
 }
 
+const getQuetionsOfCategory = async(req, res) => {	
+	try {
+		Question.paginate({categoryId: req.query.categoryId}, {populate: ['fromAdmins','fromUsers','categoryId'], lean: true, sort: {_id: -1}, page: req.query.page ?? 1, limit: 5})
+			.then(results => {
+				return res.json(results);
+			})
+			.catch(err => {
+				console.log(err);
+				throw err;
+			});
+	}
+	catch (error) {
+		console.log(error);
+		return res.status(500).json({error: 'Some error occured!'});
+	}
+}
+
 const getallcategory = async(req, res) => {
     try {
         const categories = await CategoryModel.find({})
@@ -27,8 +44,8 @@ const getallcategory = async(req, res) => {
         })
     }
 }
+
 const deletecategory = async(req, res) => {
-	console.log(req.body)
 	try {
 			const categories = await CategoryModel.remove({_id:req.body.id})
 			res.status(200).json({
@@ -105,5 +122,6 @@ module.exports = {
     getallcategory,
     createquestion,
     getallquestion,
-		deletecategory
+		deletecategory,
+		getQuetionsOfCategory
 }

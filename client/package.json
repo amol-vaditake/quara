@@ -49,6 +49,7 @@
     "react-alice-carousel": "^2.6.4",
     "react-bootstrap": "^2.4.0",
     "react-dom": "^16.14.0",
+    "react-file-base64": "^1.0.3",
     "react-multi-carousel": "^2.8.2",
     "react-redux": "^8.0.2",
     "react-responsive-carousel": "^3.2.23",

@@ -37,6 +37,18 @@ const fetchQuestions = (page) => {
     })
 }
 
+const fetchQuestionsByCategory = (page,categoryId) => {
+	return new Promise((resolve, reject) => {
+			axios.get(`${process.env.REACT_APP_API_URL}/api/categories/questions?page=${page}&categoryId=${categoryId}`)
+					.then(res => {
+							resolve(res.data)
+					})
+					.catch(err => {
+							reject(err)
+					})
+	})
+}
+
 const fetchAnswersOfQuestion = (question) => {
     return new Promise((resolve, reject) => {
         axios.get(`${process.env.REACT_APP_API_URL}/api/users/questions/${question}/answers`)
@@ -53,5 +65,6 @@ export {
     createQuestion,
     postAnswer,
     fetchQuestions,
+		fetchQuestionsByCategory,
     fetchAnswersOfQuestion
 }

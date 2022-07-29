@@ -51,9 +51,11 @@ async function AdminAuth(req, res, next) {
 
 function athenticateadmin(req, res, next) {
 	try {
-		const token = req.headers.authorization;
+		if (!req.headers["authorization"]) return res.status(401).json({ error: "UnAuthorized" })
+		let token = req.headers.authorization;
 		if (token) {
 			try {
+        token = req.headers["authorization"].split(" ")[1]
 				const isValidToken = jwt.verify(token, process.env.SECRETKEY);
 				if (isValidToken) next();
 				else {
