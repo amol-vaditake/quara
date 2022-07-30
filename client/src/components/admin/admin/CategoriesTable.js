@@ -55,7 +55,7 @@ export default function CategoriesTable({ categories = [], fetch, setFetch }) {
                     style={{
                       ...(i !== categories.length - 1 ? { borderBottom: '2px solid rgb(255, 137, 130)' } : {}),
                       borderRight: '2px solid rgb(255, 137, 130)',
-                      lineHeight: '6rem'
+                      lineHeight: '7.8rem'
                     }}
                     title={new Date(c.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                   >
@@ -67,7 +67,7 @@ export default function CategoriesTable({ categories = [], fetch, setFetch }) {
                     style={{
                       borderRight: '2px solid rgb(255, 137, 130)',
                       ...(i !== categories.length - 1 ? { borderBottom: '2px solid rgb(255, 137, 130)' } : {}),
-                      lineHeight: '6rem'
+                      lineHeight: '7.8rem'
                     }}
                   >
                     {c.name}
@@ -79,17 +79,17 @@ export default function CategoriesTable({ categories = [], fetch, setFetch }) {
 											padding:'8px',
                       borderRight: '2px solid rgb(255, 137, 130)',
                       ...(i !== categories.length - 1 ? { borderBottom: '2px solid rgb(255, 137, 130)' } : {}),
-                      lineHeight: '6rem'
+                      lineHeight: '7.8rem'
                     }}
                   >
-                    <img style={{width:'65%'}} onClick={()=>setImage(c.image)} src={c.image}  alt='img' title='Click to see full image'/>
+                    <img style={{float: 'left',width:'200px',height: '100px',objectFit: 'cover'}} onClick={()=>setImage(c.image)} src={c.image}  alt='img' title='Click to see full image'/>
                   </Grid>
                   <Grid
                     item
                     xs={2}
                     style={{
                       ...(i !== categories.length - 1 ? { borderBottom: '2px solid rgb(255, 137, 130)' } : {}),
-                      lineHeight: '6rem'
+                      lineHeight: '7.8rem'
                     }}
                   >
                     <DeleteIcon size='small' style={{ cursor: 'pointer' }} onClick={() => onDelete(c._id)} />

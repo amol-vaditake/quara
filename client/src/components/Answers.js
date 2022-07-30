@@ -1,11 +1,5 @@
-import { Card, List, Grid, ListItem, ListItemAvatar, ListItemText, Typography, TextField, CircularProgress, IconButton } from "@material-ui/core";
+import { Card,  Grid,Typography, CircularProgress, IconButton } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import UserIcon from '@material-ui/icons/AccountCircle';
-import store from "../store";
-import { logoutUser } from "../actions/authActions";
 import { fetchAnswersOfQuestion, postAnswer } from "../actions/postActions";
 import { toast } from "react-toastify";
 import VolumeUpIcon from '@material-ui/icons/VolumeUp';
@@ -13,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 export default function Answers({ match }) {
 	  console.log(match)
-    const { user } = useSelector(state => state.auth)
+    // const { user } = useSelector(state => state.auth)
     const [question, setQuestion] = useState(null)
     const [answers, setAnswers] = useState([])
     const [error, setError] = useState('')
@@ -51,6 +45,7 @@ export default function Answers({ match }) {
                 setQuestion(data.question)
                 setAnswers(data.answers)
             })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [re])
 
     const playAudio = (audio) => {
@@ -133,7 +128,7 @@ export default function Answers({ match }) {
                         ))
                     }
                     {
-                        !answers || answers.length === 0 && (
+                        (!answers || answers.length === 0) && (
                             <Card style={{ width: "100%", padding: 24, borderRadius: 24, marginBottom: 18 }}>
                                 <Typography variant="h6">
                                     No answers yet!
