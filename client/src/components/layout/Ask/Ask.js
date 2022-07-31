@@ -4,9 +4,10 @@ import { createQuestion } from "../../../actions/postActions";
 import "./ask.scss";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Card, Grid, List, ListItem, Typography } from "@material-ui/core";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import CategoryList from './CategoryList'
 const apiURL = process.env.REACT_APP_API_URL
 
 function Ask({ questions, re, setRe ,isCategoryPage, categoryId}) {
@@ -157,18 +158,8 @@ function Ask({ questions, re, setRe ,isCategoryPage, categoryId}) {
         </form>
 				{(categories||[]).filter(c=>Boolean(c._id)).length ?
 				<Grid style={{fontWeight:'500',color:'#b92b27'}}>
-				  <h5>Go to category</h5>
-					<ul>
-						{(categories||[]).filter(c=>Boolean(c._id)).map(c=>
-							{
-							return <li style={{listStyleType:'circle', marginLeft:'2rem'}}>
-											<Link to={`/category/${c._id}`} className="btn-flat waves-effect" style={{color:'#5B84B1FF'}}>
-												{c.name}
-											</Link>
-										</li>
-							}
-						)}
-					</ul>
+				  <h5>Categories</h5>
+					<CategoryList categories={(categories||[]).filter(c=>Boolean(c._id))}/>
 				</Grid>
 				:''}
         <List>
