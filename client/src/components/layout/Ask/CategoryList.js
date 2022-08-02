@@ -6,6 +6,7 @@ import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import { Link } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
 import LinkIcon from '@material-ui/icons/Link';
+import useWindowDimensions from '../../../WindowHook'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,12 +24,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TitlebarImageList({categories}) {
   const classes = useStyles();
-
+	const { width } = useWindowDimensions();
   return (
     <div className={classes.root}>
-      <ImageList cols={4} gap={2}>
+      <ImageList cols={width > 600 ? 4: 2} gap={2}>
         {categories.map((item) => (
-          <ImageListItem key={item.image} style={{padding:'8px'}}>
+          <ImageListItem key={item.image} style={{padding:'2px'}}>
 						<Link to={`/category/${item._id}`} style={{color:'#5B84B1FF'}}>
             <img src={item.image} alt={item.name}  style={{width:'250px',height: '125px',maxWidth:'100%'}}/>
             <ImageListItemBar
